@@ -1,0 +1,19 @@
+{
+  "name": "MultiverseBot",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "keywords": [
+    "util",
+    "functional",
+    "server",
+    "client",
+    "browser"
+  ],
+  "author": "alexzaccaria",
+  "contributors": [],
+  "dependencies": {
+    "telegram-node-bot": "^3.0.7"
+  }
+}
