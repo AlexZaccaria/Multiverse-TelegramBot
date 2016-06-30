@@ -8,19 +8,30 @@
 // + QUIT
 //      > Usage: quit
 
-// please, modify those two pars
-const ADMIN_NICKNAME = "";
-const APP_TOKEN = "";
-// please, modify those two pars
-
 const Telegram = require('telegram-node-bot');
 const TelegramBaseController = Telegram.TelegramBaseController;
-const tg = new Telegram.Telegram(APP_TOKEN);
+const tg = new Telegram.Telegram('210372416:AAExoqUZaaHKBsxRaKyFKiHdRP8gQPIOUyo');
 
 let IDClients = {};
 let Clients = new Array();
 let AdminID = -1;
 let LastIDToAdmin = -1;
+
+
+class AdminTester extends TelegramBaseController 
+{
+    testHandler($) 
+    {
+        console.log($);
+    }
+    
+    get routes() 
+    {
+        return {
+            '!test :command': 'testHandler'
+        }
+    }
+}
 
 class AdminQuit extends TelegramBaseController 
 {
@@ -45,6 +56,8 @@ class AdminReply extends TelegramBaseController
     replyHandler($) 
     {
         let query = $.query;
+        console.log(query);
+        
         while (query[0] === " ")
             query = query.slice(1);
         
@@ -66,7 +79,7 @@ class AdminReply extends TelegramBaseController
     get routes() 
     {
         return {
-            'fr': 'replyHandler'
+            '!fr': 'replyHandler'
         }
     }
 }
@@ -96,7 +109,7 @@ class GenericHandler extends TelegramBaseController
         let from = msg._from._firstName + " " + msg._from._lastName + " (" + msg._from._username + ")";
         let id = msg._from._id; id = id.toString();
         
-        if (msg._from._username === ADMIN_NICKNAME && AdminID === -1)
+        if (msg._from._username === "SonicDerwille" && AdminID === -1)
         {
             AdminID = id;
             $.sendMessage("Sei stato autorizzato come Admin! 🙂");
@@ -149,7 +162,8 @@ class GenericHandler extends TelegramBaseController
 }
 
 tg.router
-    .when('fr', new AdminReply())
+    .when('!fr', new AdminReply())
     .when('list', new AdminList())
     .when('quit', new AdminQuit())
+    .when('!test :command', new AdminTester())
     .otherwise(new GenericHandler());
